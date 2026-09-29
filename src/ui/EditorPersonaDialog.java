@@ -5,6 +5,10 @@ import model.Persona;
 import javax.swing.*;
 import java.awt.*;
 
+
+/*
+    Finestra di dialogo per l'inserimento o la modifica di una persona.
+*/
 public class EditorPersonaDialog extends JDialog{
     private JTextField txtNome;
     private JTextField txtCognome;
@@ -12,7 +16,10 @@ public class EditorPersonaDialog extends JDialog{
     private JTextField txtTelefono;
     private JTextField txtEta;
 
+    //La persona da modificare, null se stiamo creando una nuova persona
     private Persona persona;
+
+    //true se l'utente ha premuto salva e i dati sono stati applicati
     private boolean salvato = false;
 
     public EditorPersonaDialog(JFrame parent, Persona persona) {
@@ -24,10 +31,11 @@ public class EditorPersonaDialog extends JDialog{
         if(persona != null){
             popolaCampi(persona);
         }
-        pack();
-        setLocationRelativeTo(parent);
+        pack();                         //dimensiona la finestra al contenuto
+        setLocationRelativeTo(parent);  //centra rispetto alla finestra madre
     }
 
+    //Crea e dispone i componenti del form e i pulsanti
     private void costruisciUI() {
         JPanel form = new JPanel(new GridBagLayout());
         form.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
@@ -64,6 +72,10 @@ public class EditorPersonaDialog extends JDialog{
         add(pulsanti, BorderLayout.SOUTH);
     }
 
+    /*
+        Aggiunge una coppia(label,campo) a una riga del form
+        Riusa lo stesso GridBagConstraints modificandone gridx/gridy
+    */
     private void aggiungiRiga(JPanel panel, GridBagConstraints gbc, int riga, String etichetta, JTextField campo) {
         gbc.gridx = 0;
         gbc.gridy = riga;
@@ -73,6 +85,7 @@ public class EditorPersonaDialog extends JDialog{
         panel.add(campo, gbc);
     }
 
+    //Riempie i campi con i dati della persona da modificare
     private void popolaCampi(Persona p){
         txtNome.setText(p.getNome());
         txtCognome.setText(p.getCognome());
@@ -81,6 +94,12 @@ public class EditorPersonaDialog extends JDialog{
         txtEta.setText(String.valueOf(p.getEta()));
     }
 
+    /*
+        legge i campi, li valida tramite setter/costruttore di persona e chiude la finestra se tutto è corretto
+
+        in caso di errore mostra JOptionPane e lascia la dialog aperta:
+        l'utente può correggere senza perdere i dati inseriti
+    */
     private void onSalva() {
         try {
             // Leggi i valori dai campi
@@ -118,6 +137,7 @@ public class EditorPersonaDialog extends JDialog{
         }
     }
 
+    //chiude la finestra senza applicare modifiche
     private void onAnnulla() {
         salvato = false;
         dispose();

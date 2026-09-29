@@ -6,13 +6,20 @@ import java.io.PrintStream;
 import java.util.Scanner;
 import java.util.Vector;
 
+
+/*
+    Gestisce la collezione dei contatti e la loro persistenza
+    I contatti vengono salvati automaticamente nel file:<home utente>/Rubrica/informazioni.txt
+*/
 public class Rubrica {
 
+    //dove vengono salvati i contatti
     private static final String NOME_FILE =
     System.getProperty("user.home") + File.separator + "Rubrica" + File.separator + "informazioni.txt";
 
     private Vector<Persona> contatti;
 
+    //inizializza la lista vuota e tenta di caricare i file dal disco
     public Rubrica(){
         this.contatti = new Vector<>();
         carica();
@@ -54,6 +61,7 @@ public class Rubrica {
         if (cartella != null && !cartella.exists()) {
             cartella.mkdirs();
         }
+        //formato con cui vengono salvate le persone
         try(PrintStream out = new PrintStream(NOME_FILE)){
             for(Persona p : contatti){
                 out.println(
@@ -69,6 +77,7 @@ public class Rubrica {
         }
     }
 
+    //legge tutte le persone nel file
     public void carica(){
         File file = new File(NOME_FILE);
         if(!file.exists()){

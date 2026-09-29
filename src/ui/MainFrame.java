@@ -7,6 +7,12 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 
+
+/*
+    Finestra principale dell'applicazione.
+    Mostra una tabella con i contatti e tre pulsanti: Nuovo, Modifica, Elimina.
+    La tabella è popolata a partire dalla rubrica tramite un DefaultTableModel sincronizzato manualmente dopo ogni modifica.
+*/
 public class MainFrame extends JFrame{
 
     private final Rubrica rubrica;
@@ -17,6 +23,9 @@ public class MainFrame extends JFrame{
     public MainFrame(Rubrica rubrica){
         super("Rubrica");
         this.rubrica = rubrica;
+
+        // DefaultTableModel: 3 colonne, 0 righe iniziali.
+        // Sovrascriviamo isCellEditable per rendere la tabella di sola lettura
         this.modello = new DefaultTableModel(
             new String[]{"Nome", "Cognome", "Telefono"},0
         ){
@@ -36,6 +45,7 @@ public class MainFrame extends JFrame{
         setLocationRelativeTo(null);
     }
 
+    //Costruisce e dipone i componenti grafici
     private void costruisciUI(){
         tabella.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         JScrollPane scroll = new JScrollPane(tabella);
@@ -58,6 +68,10 @@ public class MainFrame extends JFrame{
         add(pulsanti, BorderLayout.SOUTH);
     }
 
+    /*
+        Apre l'editor per una nuova persona.
+        Se l'utente salva, la persona viene aggiunta alla rubrica e la tabella aggiornata.
+    */
     private void onNuovo(){
         EditorPersonaDialog dialog = new EditorPersonaDialog(this,null);
         dialog.setVisible(true);
@@ -68,6 +82,10 @@ public class MainFrame extends JFrame{
         }
     }
 
+    /*
+        Apre l'editor sulla persona selezionata, precomipilando con i suoi dati.
+        Se nessuna riga è selezionata mostra un avviso.
+    */
     private void onModifica(){
         int riga = tabella.getSelectedRow();
         if(riga == -1){
@@ -88,6 +106,10 @@ public class MainFrame extends JFrame{
         }
     }
 
+    /*
+        Chiede conferma e se l'utente accetta elimina la persona selezionata.
+        Se non è stata selezionata una persona mostra un avviso
+    */
     private void onElimina(){
         int riga = tabella.getSelectedRow();
         if(riga == -1){
