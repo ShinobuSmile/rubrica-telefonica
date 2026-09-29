@@ -1,18 +1,37 @@
-## Getting Started
+# Rubrica Telefonica
 
-Welcome to the VS Code Java world. Here is a guideline to help you get started to write Java code in Visual Studio Code.
+Applicazione desktop in Java per la gestione di una rubrica di contatti, con interfaccia grafica Swing e persistenza su file.
 
-## Folder Structure
+## Funzionalità
 
-The workspace contains two folders by default, where:
+- Aggiunta, modifica ed eliminazione di contatti
+- Visualizzazione di tutti i contatti in una tabella
+- Validazione dei campi (nome, cognome e telefono obbligatori; età tra 0 e 150)
+- Persistenza automatica su file di testo
+- Interfaccia grafica con finestra principale e finestra di editing
 
-- `src`: the folder to maintain sources
-- `lib`: the folder to maintain dependencies
+## Requisiti
 
-Meanwhile, the compiled output files will be generated in the `bin` folder by default.
+- Java 17 o superiore (testato con JDK 26)
+- Nessuna libreria esterna
 
-> If you want to customize the folder structure, open `.vscode/settings.json` and update the related settings there.
+## Persistenza
 
-## Dependency Management
+I contatti vengono salvati automaticamente nel file:
 
-The `JAVA PROJECTS` view allows you to manage your dependencies. More details can be found [here](https://github.com/microsoft/vscode-java-dependency#manage-dependencies).
+```
+<home utente>/Rubrica/informazioni.txt
+```
+
+Formato di ogni riga:
+
+```
+nome;cognome;indirizzo;telefono;eta
+```
+
+Esempio:
+
+```
+Mario;Rossi;Via Roma 1;3331234567;30
+Lucia;Bianchi;Via Verdi 2;3339999999;25
+```
