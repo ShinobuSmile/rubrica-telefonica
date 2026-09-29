@@ -46,27 +46,38 @@ public class MainFrame extends JFrame{
     }
 
     //Costruisce e dipone i componenti grafici
-    private void costruisciUI(){
+    private void costruisciUI() {
         tabella.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         JScrollPane scroll = new JScrollPane(tabella);
 
-        JButton btnNuovo    = new JButton("Nuovo");
-        JButton btnModifica = new JButton("Modifica");
-        JButton btnElimina  = new JButton("Elimina");
+        JToolBar toolbar = creaToolBar();
+
+        setLayout(new BorderLayout());
+        add(toolbar, BorderLayout.NORTH);
+        add(scroll, BorderLayout.CENTER);
+    }
+
+    private JToolBar creaToolBar() {
+        JToolBar toolbar = ToolbarHelper.creaToolbar();
+
+        JButton btnNuovo    = ToolbarHelper.creaPulsante("Nuovo",    "nuovo.png",
+                                                  "Aggiungi un nuovo contatto");
+        JButton btnModifica = ToolbarHelper.creaPulsante("Modifica", "modifica.png",
+                                                  "Modifica il contatto selezionato");
+        JButton btnElimina  = ToolbarHelper.creaPulsante("Elimina",  "elimina.png",
+                                                  "Elimina il contatto selezionato");
 
         btnNuovo.addActionListener(e -> onNuovo());
         btnModifica.addActionListener(e -> onModifica());
         btnElimina.addActionListener(e -> onElimina());
 
-        JPanel pulsanti = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        pulsanti.add(btnNuovo);
-        pulsanti.add(btnModifica);
-        pulsanti.add(btnElimina);
+        toolbar.add(btnNuovo);
+        toolbar.add(btnModifica);
+        toolbar.add(btnElimina);
 
-        setLayout(new BorderLayout());
-        add(scroll, BorderLayout.CENTER);
-        add(pulsanti, BorderLayout.SOUTH);
+        return toolbar;
     }
+
 
     /*
         Apre l'editor per una nuova persona.

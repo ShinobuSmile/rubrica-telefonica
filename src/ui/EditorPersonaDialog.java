@@ -43,11 +43,11 @@ public class EditorPersonaDialog extends JDialog{
         gbc.insets = new Insets(4, 4, 4, 4);
         gbc.anchor = GridBagConstraints.WEST;
 
-        txtNome      = new JTextField(20);
-        txtCognome   = new JTextField(20);
+        txtNome = new JTextField(20);
+        txtCognome = new JTextField(20);
         txtIndirizzo = new JTextField(20);
-        txtTelefono  = new JTextField(20);
-        txtEta       = new JTextField(20);
+        txtTelefono = new JTextField(20);
+        txtEta = new JTextField(20);
 
         aggiungiRiga(form, gbc, 0, "Nome:", txtNome);
         aggiungiRiga(form, gbc, 1, "Cognome:", txtCognome);
@@ -55,21 +55,28 @@ public class EditorPersonaDialog extends JDialog{
         aggiungiRiga(form, gbc, 3, "Telefono:", txtTelefono);
         aggiungiRiga(form, gbc, 4, "Età:", txtEta);
 
-        JButton btnSalva    = new JButton("Salva");
-        JButton btnAnnulla  = new JButton("Annulla");
+        JToolBar toolbar = creaToolBar();
+
+        setLayout(new BorderLayout());
+        add(toolbar, BorderLayout.NORTH);
+        add(form, BorderLayout.CENTER);
+    }
+
+    private JToolBar creaToolBar() {
+        JToolBar toolbar = ToolbarHelper.creaToolbar();
+
+        JButton btnSalva   = ToolbarHelper.creaPulsante("Salva",   "modifica.png",   "Salva i dati");
+        JButton btnAnnulla = ToolbarHelper.creaPulsante("Annulla", "elimina.png", "Annulla senza salvare");
 
         btnSalva.addActionListener(e -> onSalva());
         btnAnnulla.addActionListener(e -> onAnnulla());
 
+        // Invio nella dialog = Salva
         getRootPane().setDefaultButton(btnSalva);
 
-        JPanel pulsanti = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-        pulsanti.add(btnAnnulla);
-        pulsanti.add(btnSalva);
-
-        setLayout(new BorderLayout());
-        add(form, BorderLayout.CENTER);
-        add(pulsanti, BorderLayout.SOUTH);
+        toolbar.add(btnSalva);
+        toolbar.add(btnAnnulla);
+        return toolbar;
     }
 
     /*

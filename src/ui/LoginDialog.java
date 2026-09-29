@@ -53,16 +53,24 @@ public class LoginDialog extends JDialog{
         gbc.gridx = 1;
         form.add(txtPassword, gbc);
 
-        JButton btnLogin = new JButton("LOGIN");
-        btnLogin.addActionListener(e -> onLogin());
-        getRootPane().setDefaultButton(btnLogin);
-
-        JPanel pulsante = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        pulsante.add(btnLogin);
+        JToolBar toolbar = creaToolBar();
 
         setLayout(new BorderLayout());
+        add(toolbar, BorderLayout.NORTH);
         add(form, BorderLayout.CENTER);
-        add(pulsante, BorderLayout.SOUTH);
+        
+    }
+
+    private JToolBar creaToolBar() {
+        JToolBar toolbar = ToolbarHelper.creaToolbar();
+
+        JButton btnLogin = ToolbarHelper.creaPulsante("LOGIN", "login.png", "Accedi al sistema");
+        btnLogin.addActionListener(e -> onLogin());
+
+        getRootPane().setDefaultButton(btnLogin);
+
+        toolbar.add(btnLogin);
+        return toolbar;
     }
 
     private void onLogin(){
