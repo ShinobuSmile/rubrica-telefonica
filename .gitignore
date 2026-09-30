@@ -15,3 +15,6 @@ target/
 # File di sistema
 .DS_Store
 Thumbs.db
+
+lib/*.jar
+credenziali_database.properties
