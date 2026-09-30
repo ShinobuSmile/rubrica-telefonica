@@ -1,93 +1,65 @@
-# Rubrica Telefonica
+# Rubrica Telefonica — versione con database MySQL
 
-Applicazione desktop in Java per la gestione di una rubrica di contatti, con interfaccia grafica Swing e persistenza su file.
+Applicazione desktop in Java per la gestione di una rubrica di contatti, con login utente, interfaccia grafica Swing e persistenza su database MySQL.
+
+> ⚠️ **Nota**: questo è il branch `feature/persistenza-sql`. Il branch `main` contiene la versione con persistenza su file di testo.
 
 ## Funzionalità
 
-- **Login utente** con credenziali salvate su file
+- **Login utente** con credenziali salvate su database
 - **Gestione contatti**: aggiunta, modifica, eliminazione
 - **Visualizzazione** di tutti i contatti in una tabella
 - **Barra degli strumenti** con icone per le azioni principali
 - **Validazione** dei campi (nome, cognome e telefono obbligatori; età tra 0 e 150)
-- **Persistenza automatica** su file separati, uno per contatto
-- **Utente di default** creato al primo avvio (credenziali admin/admin)
+- **Persistenza** su database MySQL tramite JDBC
 
 ## Requisiti
 
-- Java 17 o superiore (testato con JDK 26)
-- Nessuna libreria esterna
+- **Java 17** o superiore (testato con JDK 26)
+- **MySQL Server 8.0** o superiore
+- **MySQL Connector/J** (driver JDBC) — incluso nella cartella `lib/`
 
-## Dati di un contatto
+## Configurazione del database
 
-| Campo      | Tipo   | Obbligatorio |
-|------------|--------|--------------|
-| Nome       | String | Sì           |
-| Cognome    | String | Sì           |
-| Indirizzo  | String | No           |
-| Telefono   | String | Sì           |
-| Età        | int    | Sì (0-150)   |
+### 1. Installare MySQL
 
-## Login
+Scaricare e installare **MySQL Community Server 8.0** da:
+https://dev.mysql.com/downloads/installer/
 
-Al primo avvio, il programma crea automaticamente il file delle credenziali con un utente di default:
+Durante l'installazione:
+- Scegliere **"Developer Default"** o **"Custom"** (includendo Server + Workbench + Connector/J)
+- Impostare una password per l'utente `root` (annotarla)
+- Lasciare la porta di default `3306`
+- Configurare MySQL come servizio Windows
 
-```
-username: admin
-password: admin
-```
+### 2. Creare il database
 
-**Si consiglia di modificare la password** aprendo il file `utenti.txt` (vedi sezione Persistenza) e sostituendo la riga con le proprie credenziali.
+Aprire **MySQL Workbench** e connettersi al server locale. Poi:
 
-### Aggiungere altri utenti
+- `File → Open SQL Script...`
+- Selezionare `schema_database.sql`
+- Cliccare il fulmine ⚡ per eseguire
 
-Aprire il file `utenti.txt` e aggiungere una riga per ogni utente, nel formato:
-
-```
-username;password
-```
-
-## Persistenza
-
-L'applicazione salva i dati in due punti distinti, dentro la cartella home dell'utente:
-
-```
-<home utente>/Rubrica/
-├── informazioni/                    ← cartella dei contatti
-│   ├── Persona0001.txt
-│   ├── Persona0002.txt
-│   └── ...
-└── utenti.txt                       ← credenziali di login
-```
-
-Su Windows: `C:\Users\<nome>\Rubrica\`  
-Su Linux/Mac: `/home/<nome>/Rubrica/`
-
-## Compilazione ed esecuzione
-
-### Da IDE (VS Code, Eclipse, IntelliJ)
-
-Aprire il progetto ed eseguire `Main.java`.
-
-### Da terminale
+Oppure da riga di comando:
 
 ```bash
-# 1. Compila i sorgenti
-javac -d out -encoding UTF-8 src/Main.java src/model/*.java src/ui/*.java src/persistence/*.java
-
-# 2. Copia le risorse (icone) nella cartella di build
-cp -r src/resources out/resources
-# Su Windows PowerShell:
-# Copy-Item -Recurse -Force src/resources out/resources
-
-# 3. Crea il JAR eseguibile
-jar cfm Rubrica.jar manifest.txt -C out .
-
-# 4. Esegui
-java -jar Rubrica.jar
+mysql -u root -p < schema_database.sql
 ```
 
-Il file `manifest.txt` deve contenere:
+Lo script crea:
+- Il database `rubrica`
+- La tabella `persone` (contatti)
+- La tabella `utenti` (credenziali di login)
+- L'utente di default `admin` / `admin`
 
+### 3. Configurare le credenziali
+
+Aprire `credenziali_database.properties` e sostituire i valori con le proprie credenziali MySQL:
+
+```properties
+db.url=jdbc:mysql://localhost:3306/rubrica
+db.user=root
+db.password=lamiapassword
 ```
-Main-Class: Main
-```
+
+**Nota**: questo file **non** deve essere committato su Git (è nel `.gitignore`).
