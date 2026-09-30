@@ -1,10 +1,11 @@
 import model.Rubrica;
-import persistence.LoginServiceFile;
+import persistence.DatabaseManager;
+import persistence.LoginServiceDB;
 import ui.MainFrame;
 import ui.LoginDialog;
 import ui.LoginService;
 
-import javax.swing.*;
+import javax.swing.SwingUtilities;
 
 public class Main {
 
@@ -12,16 +13,19 @@ public class Main {
 
         SwingUtilities.invokeLater(() -> {
 
-            LoginService loginService = new LoginServiceFile();
-            LoginDialog loginDialog = new LoginDialog(loginService);
-            loginDialog.setVisible(true);
+            DatabaseManager db = new DatabaseManager();
 
-            //una volta autenticato apre il mainframe
-            if(loginDialog.isAutenticato()){
-                Rubrica rubrica = new Rubrica();
+            // 1. Login
+            LoginService loginService = new LoginServiceDB(db);
+            LoginDialog loginDialog = new LoginDialog(loginService);
+            loginDialog.setVisible(true);   // BLOCCA finché non viene chiusa
+
+            // 2. Se autenticato → MainFrame
+            if (loginDialog.isAutenticato()) {
+                Rubrica rubrica = new Rubrica(db);
                 MainFrame frame = new MainFrame(rubrica);
                 frame.setVisible(true);
-            }else{
+            } else {
                 System.exit(0);
             }
         });
