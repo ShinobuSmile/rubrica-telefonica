@@ -14,7 +14,7 @@ public class Main {
 
             LoginService loginService = new LoginServiceFile();
             LoginDialog loginDialog = new LoginDialog(loginService);
-            loginDialog.setVisible(true);//blocca finchè non viene chiuso
+            loginDialog.setVisible(true);
 
             //una volta autenticato apre il mainframe
             if(loginDialog.isAutenticato()){
@@ -22,7 +22,7 @@ public class Main {
                 MainFrame frame = new MainFrame(rubrica);
                 frame.setVisible(true);
             }else{
-                System.exit(0);//login annullato
+                System.exit(0);
             }
         });
         
